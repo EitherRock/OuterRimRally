@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from .. import crud, schemas
@@ -18,13 +18,16 @@ def get_racers(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
 def get_racer(racer_id: int, db: Session = Depends(get_db)):
     db_racer = crud.get_racer(db=db, racer_id=racer_id)
     if db_racer is None:
-        raise HTTPException(status_code=404, detail="Racer not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Racer id {racer_id} not found"
+        )
     return db_racer
 
 @router.put("/{racer_id}", response_model=schemas.RacerResponse)
 def update_racer(racer_id: int, racer: schemas.RacerUpdate, db: Session = Depends(get_db)):
     return crud.update_racer(db=db, racer_id=racer_id, racer=racer)
 
-@router.delete("/{racer_id}", response_model=schemas.RacerResponse)
+@router.delete("/{racer_id}", response_model=schemas.DeleteResponse)
 def delete_racer(racer_id: int, db: Session = Depends(get_db)):
     return crud.delete_racer(db=db, racer_id=racer_id)
