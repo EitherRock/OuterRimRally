@@ -11,6 +11,12 @@ class RankBase(BaseModel):
 class RankCreate(RankBase):
     pass
 
+class RankUpdate(RankBase):
+    name: Optional[str] = None
+    credits_first: Optional[int] = None
+    credits_second: Optional[int] = None
+    credits_third: Optional[int] = None
+
 class RankResponse(RankBase):
     id: int
     created: datetime
@@ -44,3 +50,5 @@ class RacerResponse(RacerBase):
         from_attributes = True # Important for response model to map from SQLAlchemy model to Pydantic model
 
 
+class DeleteResponse(BaseModel):
+    message: str
