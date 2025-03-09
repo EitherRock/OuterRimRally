@@ -7,8 +7,9 @@ import os
 
 load_dotenv()
 db_pasword = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
 
-SQLALCHEMY_DATABASE_URL = f'postgresql+psycopg2://postgres:{db_pasword}@localhost/outer_rim_rally'
+SQLALCHEMY_DATABASE_URL = f'postgresql+psycopg2://postgres:{db_pasword}@{db_host}/outer_rim_rally'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

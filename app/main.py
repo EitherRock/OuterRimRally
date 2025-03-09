@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine
-from .routers import racers, ranks, parts, categories
+from .routers import racers, ranks, parts, categories, login
 
 # models.Base.metadata.create_all(bind=engine)
 
@@ -19,3 +19,4 @@ app.include_router(racers.router)
 app.include_router(ranks.router)
 app.include_router(parts.router)
 app.include_router(categories.router)
+app.include_router(login.router)

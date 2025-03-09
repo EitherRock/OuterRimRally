@@ -4,6 +4,7 @@ from typing import List
 from ..crud import racer_crud
 from ..schemas import racer, common
 from ..database import get_db
+from .. import oauth2
 
 router = APIRouter(prefix="/racers", tags=["racers"])
 
@@ -26,7 +27,12 @@ def get_racer(racer_id: int, db: Session = Depends(get_db)):
     return db_racer
 
 @router.put("/{racer_id}", response_model=racer.RacerResponse)
-def update_racer(racer_id: int, racer: racer.RacerUpdate, db: Session = Depends(get_db)):
+def update_racer(
+    racer_id: int, 
+    racer: racer.RacerUpdate, 
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user)
+):
     return racer_crud.update_racer(db=db, racer_id=racer_id, racer=racer)
 
 @router.delete("/{racer_id}", response_model=common.DeleteResponse)
