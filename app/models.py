@@ -17,7 +17,7 @@ class Racer(Base):
 
 
     rank = relationship("Rank", lazy="joined")  # Optimizes the join when querying
-    orders = relationship("Order", cascade="all, delete")
+    orders = relationship("Order", cascade="all, delete", back_populates="racer")
 
 class Rank(Base):
     __tablename__ = 'ranks'
@@ -33,8 +33,9 @@ class Category(Base):
     __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True, nullable=False)
+    created = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     name = Column(String, nullable=False)
-    description = Column(String, )
+    description = Column(String, nullable=True)
 
 class Part(Base):
     __tablename__ = 'parts'
@@ -42,13 +43,13 @@ class Part(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     created = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     updated = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
-    category = Column(String, ForeignKey("categories.name", ondelete="SET NULL"), nullable=True, index=True)
+    category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True, index=True)
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
-    price = Column(Integer, nullable=False, server_default=0)
-    stock_quantity = Column(Integer, nullable=False, server_default=0)
+    price = Column(Integer, nullable=False, server_default=text('0'))
+    stock_quantity = Column(Integer, nullable=False, server_default=text('0'))
 
-    category = relationship("Category")
+    category = relationship("Category", backref="parts")
     
 class Order(Base):
     __tablename__ = 'orders'
@@ -56,9 +57,9 @@ class Order(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     racer_id = Column(Integer, ForeignKey("racers.id", ondelete="CASCADE"), nullable=True, index=True)
     order_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
-    total_amount = Column(Integer, nullable=False, server_default=0)
+    total_amount = Column(Integer, nullable=False, server_default=text('0'))
 
-    racer = relationship("Racer", lazy="joined")
+    racer = relationship("Racer", lazy="joined", back_populates="orders")
     order_parts =relationship("OrderPart", cascade="all, delete")
 
 class OrderPart(Base):
@@ -67,8 +68,8 @@ class OrderPart(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     order_id = Column(Integer, ForeignKey("orders.id", ondelete="CASCADE"), nullable=True, index=True)
     part_id = Column(Integer, ForeignKey("parts.id", ondelete="SET NULL"), nullable=False, index=True)
-    quantity = Column(Integer, nullable=False, server_default=1)
-    unit_price = Column(Integer, nullable=False, server_default=0)
+    quantity = Column(Integer, nullable=False, server_default=text('1'))
+    unit_price = Column(Integer, nullable=False, server_default=text('0'))
 
     order = relationship("Order")
     part = relationship("Part")

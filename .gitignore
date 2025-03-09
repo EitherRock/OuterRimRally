@@ -1,8 +1,19 @@
 *.pyc
 __pycache__/
 
+node_modules/
+
+build/
+dist/
+
 venv/
 
 .env
+.env.local
+.env.development
+.env.production
 
 alembic.ini
+
+.vscode/
+.idea/
