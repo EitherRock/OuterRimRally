@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@400;500;700&display=swap');
+
+.App {
+  text-align: center;
+  padding: 50px;
+  background: #000;
+  color: #fff;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  /* text-shadow: 0 0 5px #ff7300, 0 0 10px #00ff00; */
+  text-shadow: 0 0 5px #ff7300, 0 0 10px #ff7300;
+
+}
+
+p {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 1.2rem;
+}
+
+button {
+  font-family: 'Exo 2', sans-serif;
+  background: linear-gradient(90deg, #00ff00, #00ffff);
+  border: none;
+  padding: 10px 20px;
+  color: #000;
+  cursor: pointer;
+  margin-top: 20px;
+}
