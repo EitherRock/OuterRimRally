@@ -18,13 +18,8 @@ def get_racers(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
 
 @router.get("/{racer_id}", response_model=racer.RacerResponse)
 def get_racer(racer_id: int, db: Session = Depends(get_db)):
-    db_racer = racer_crud.get_racer(db=db, racer_id=racer_id)
-    if db_racer is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f"Racer id {racer_id} not found"
-        )
-    return db_racer
+    return racer_crud.get_racer(db=db, racer_id=racer_id)
+
 
 @router.put("/{racer_id}", response_model=racer.RacerResponse)
 def update_racer(

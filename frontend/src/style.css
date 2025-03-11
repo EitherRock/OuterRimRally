@@ -1,8 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@400;500;700&display=swap');
 
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .App {
-  text-align: center;
-  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* veritcal */
+  align-items: center; /* horizontal */
+  height: 100vh;
   background: #000;
   color: #fff;
 }
@@ -28,4 +38,19 @@ button {
   color: #000;
   cursor: pointer;
   margin-top: 20px;
+}
+
+.app-login {
+  background: url('C:\Users\Nathan\Documents\GitHub\OuterRimRally\frontend\public\nebula.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.outer-rim-header {
+  padding-top: 50px;
 }
