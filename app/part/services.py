@@ -1,13 +1,11 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
-from .. import models
-from ..schemas import part
+from .models import Part
+from .schemas import PartCreate, PartUpdate
 from fastapi import HTTPException, status
-from ..util import hash_password
 from datetime import datetime
 
-def create_part(db: Session, part: part.PartCreate):
-    new_part = models.Part(
+def create(db: Session, part: PartCreate):
+    new_part = Part(
         name=part.name,
         category_id=part.category_id,
         description=part.description,
@@ -20,14 +18,14 @@ def create_part(db: Session, part: part.PartCreate):
     db.refresh(new_part)
     return new_part
 
-def get_parts(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Part).offset(skip).limit(limit).all()
+def get_all(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Part).offset(skip).limit(limit).all()
 
-def get_part(db: Session, part_id: int):
-    return db.query(models.Part).filter(models.Part.id == part_id).first()
+def get(db: Session, part_id: int):
+    return db.query(Part).filter(Part.id == part_id).first()
 
-def update_part(db: Session, part_id: int, part: part.PartUpdate):
-    db_part = db.query(models.Part).filter(models.Part.id == part_id).first()
+def update(db: Session, part_id: int, part: PartUpdate):
+    db_part = db.query(Part).filter(Part.id == part_id).first()
 
     if not db_part:
         raise HTTPException(
@@ -65,14 +63,14 @@ def update_part(db: Session, part_id: int, part: part.PartUpdate):
     update_data['updated'] = datetime.now(datetime.timezone.utc)
 
     if update_data:
-        db.query(models.Part).filter(models.Part.id == part_id).update(update_data)
+        db.query(Part).filter(Part.id == part_id).update(update_data)
         db.commit()
         db.refresh(db_part)
     
     return db_part
 
-def delete_part(db: Session, part_id: int):
-    db_part = db.query(models.Part).filter(models.Part.id == part_id).first()
+def delete(db: Session, part_id: int):
+    db_part = db.query(Part).filter(Part.id == part_id).first()
 
     if not db_part:
         raise HTTPException(

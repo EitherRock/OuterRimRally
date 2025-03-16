@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
-from .category import CategoryBase
+from ..category.schemas import CategoryBase
 
 class PartBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)

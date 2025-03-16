@@ -3,8 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
-from . import models, database
-from .schemas import auth_schema
+from ..racer.models import Racer
+from ..database.core import get_db
+from .schemas import TokenData
 from dotenv import load_dotenv
 import os
 
@@ -34,7 +35,7 @@ def verify_access_token(token: str, credentials_exception):
         if id is None:
             raise credentials_exception
         
-        token_data = auth_schema.TokenData(id=id)
+        token_data = TokenData(id=id)
     except JWTError:
         raise credentials_exception
     
@@ -43,7 +44,7 @@ def verify_access_token(token: str, credentials_exception):
 
 def get_current_user(
         token: str = Depends(oauth2_scheme),
-        db: Session = Depends(database.get_db)
+        db: Session = Depends(get_db)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -52,7 +53,7 @@ def get_current_user(
     )
 
     token = verify_access_token(token, credentials_exception)
-    user = db.query(models.Racer).filter(models.Racer.id == token.id).first()
+    user = db.query(Racer).filter(Racer.id == token.id).first()
 
     return user
 

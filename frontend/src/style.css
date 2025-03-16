@@ -41,7 +41,7 @@ button {
 }
 
 .app-login {
-  background: url('C:\Users\Nathan\Documents\GitHub\OuterRimRally\frontend\public\nebula.jpg') no-repeat center center fixed;
+  background: url('/public/nebula.jpg') no-repeat center center fixed;
   background-size: cover;
   display: flex;
   flex-direction: column;

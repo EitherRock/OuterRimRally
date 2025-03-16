@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
-from .rank import RankBase
+from ..rank.schemas import RankBase
 
 class RacerBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)

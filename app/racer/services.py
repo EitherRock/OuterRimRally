@@ -1,17 +1,16 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
-from .. import models
-from ..schemas import racer
+from .schemas import RacerCreate, RacerUpdate
+from .models import Racer
 from fastapi import HTTPException, status
 from ..util import hash_password
 
 
-def get_racer_by_name(db: Session, racer_name: str):
-    db_racer = db.query(models.Racer).filter(models.Racer.name == racer_name).first()
+def get_by_name(db: Session, racer_name: str):
+    db_racer = db.query(Racer).filter(Racer.name == racer_name).first()
     return db_racer
 
-def create_racer(db: Session, racer: racer.RacerCreate):
-    existing_racer = get_racer_by_name(db, racer.name)
+def create(db: Session, racer: RacerCreate):
+    existing_racer = get_by_name(db, racer.name)
 
     if existing_racer:
         raise HTTPException(
@@ -19,7 +18,7 @@ def create_racer(db: Session, racer: racer.RacerCreate):
             detail=f"Racer with name {racer.name} already taken"
         )
 
-    new_racer = models.Racer(
+    new_racer = Racer(
         name=racer.name,
         password_hash=hash_password(racer.password),
         rank_id=racer.rank_id,
@@ -32,11 +31,11 @@ def create_racer(db: Session, racer: racer.RacerCreate):
     db.refresh(new_racer)
     return new_racer
 
-def get_racers(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Racer).offset(skip).limit(limit).all()
+def get_all(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Racer).offset(skip).limit(limit).all()
 
-def get_racer(db: Session, racer_id: int):
-    db_racer = db.query(models.Racer).filter(models.Racer.id == racer_id).first()
+def get(db: Session, racer_id: int):
+    db_racer = db.query(Racer).filter(Racer.id == racer_id).first()
 
     if not db_racer:
         raise HTTPException(
@@ -47,8 +46,8 @@ def get_racer(db: Session, racer_id: int):
     return db_racer 
 
 
-def update_racer(db: Session, racer_id: int, racer: racer.RacerUpdate):
-    db_racer = db.query(models.Racer).filter(models.Racer.id == racer_id).first()
+def update(db: Session, racer_id: int, racer: RacerUpdate):
+    db_racer = db.query(Racer).filter(Racer.id == racer_id).first()
 
     if not db_racer:
         raise HTTPException(
@@ -80,14 +79,14 @@ def update_racer(db: Session, racer_id: int, racer: racer.RacerUpdate):
         update_data['password_hash'] = racer.password
 
     if update_data:
-        db.query(models.Racer).filter(models.Racer.id == racer_id).update(update_data)
+        db.query(Racer).filter(Racer.id == racer_id).update(update_data)
         db.commit()
         db.refresh(db_racer)
 
     return db_racer
 
-def delete_racer(db: Session, racer_id: int):
-    db_racer = db.query(models.Racer).filter(models.Racer.id == racer_id).first()
+def delete(db: Session, racer_id: int):
+    db_racer = db.query(Racer).filter(Racer.id == racer_id).first()
     if not db_racer:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
