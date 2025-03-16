@@ -3,6 +3,7 @@ from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.orm import relationship
 from ..database.core import Base
+from ..order.models import Order
 
 class Racer(Base):
     __tablename__ = 'racers'

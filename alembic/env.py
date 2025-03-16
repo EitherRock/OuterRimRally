@@ -4,7 +4,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from app import models
+from app.order.models import Order, OrderPart
+from app.racer.models import Racer
+from app.rank.models import Rank
+from app.part.models import Part
+from app.category.models import Category
 from app.database.core import Base
 
 

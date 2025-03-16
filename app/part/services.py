@@ -1,8 +1,12 @@
 from sqlalchemy.orm import Session
-from .models import Part
-from .schemas import PartCreate, PartUpdate
 from fastapi import HTTPException, status
 from datetime import datetime
+
+from .models import Part
+from .schemas import PartCreate, PartUpdate
+
+from ..category.models import Category
+
 
 def create(db: Session, part: PartCreate):
     new_part = Part(
@@ -81,3 +85,21 @@ def delete(db: Session, part_id: int):
     db.delete(db_part)
     db.commit()
     return {"message": "Part deleted successfully"}
+
+def create_stock_parts(db: Session):
+    power_source_category = Category(name='Power Source')
+    propulsion_category = Category(name='Propulsion')
+    handling_category = Category(name='Handling')
+    print('jel;l')
+
+    db.add_all([power_source_category, propulsion_category, handling_category])
+    db.commit()
+
+    stock_power_source = Part(name='Stock', category_id=power_source_category.id)
+    stock_propulsion = Part(name='Stock', category_id=propulsion_category.id)
+    stock_handling = Part(name='Stock', category_id=handling_category.id)
+
+    db.add_all([stock_power_source, stock_propulsion, stock_handling])
+    db.commit()
+    
+    return [stock_power_source, stock_propulsion, stock_handling]

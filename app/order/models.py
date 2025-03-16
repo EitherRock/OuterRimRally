@@ -8,12 +8,12 @@ class Order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True, nullable=False)
-    racer_id = Column(Integer, ForeignKey("racers.id", ondelete="CASCADE"), nullable=True, index=True)
+    racer_id = Column(Integer, ForeignKey('racers.id', ondelete='CASCADE'), nullable=True, index=True)
     order_date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
     total_amount = Column(Integer, nullable=False, server_default=text('0'))
 
-    racer = relationship("Racer", lazy="joined", back_populates="orders")
-    order_parts =relationship("OrderPart", cascade="all, delete")
+    racer = relationship('Racer', lazy='joined', back_populates='orders')
+    order_parts =relationship('OrderPart', cascade='all, delete')
 
 class OrderPart(Base):
     __tablename__ = 'order_parts'

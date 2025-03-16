@@ -1,16 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from .services import create, get_all, get, update, delete
+from .services import create, get_all, get, update, delete, create_stock_parts
 from .schemas import PartCreate, PartUpdate, PartResponse
 from ..database.core import get_db
 
 router = APIRouter(prefix="/parts", tags=["parts"])
 
+
+@router.post('/create_stock_parts', response_model=List[PartResponse])
+def stock_parts_create(db: Session = Depends(get_db)):
+    return create_stock_parts(db=db)
+
 @router.post("/", response_model=PartResponse)
 def create_part(part: PartCreate, db: Session = Depends(get_db)):
     return create(db=db, part=part)
-
 
 @router.get("/", response_model=List[PartResponse])
 def get_parts(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):

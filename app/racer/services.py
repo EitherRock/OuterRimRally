@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
+
 from .schemas import RacerCreate, RacerUpdate
 from .models import Racer
-from fastapi import HTTPException, status
+
+from ..rank.services import get as get_rank_by_id
 from ..util import hash_password
 
 
@@ -10,12 +13,19 @@ def get_by_name(db: Session, racer_name: str):
     return db_racer
 
 def create(db: Session, racer: RacerCreate):
-    existing_racer = get_by_name(db, racer.name)
+    existing_racer = get_by_name(db=db, racer_name=racer.name)
+    existing_rank = get_rank_by_id(db=db, rank_id=racer.rank_id)
 
     if existing_racer:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Racer with name {racer.name} already taken"
+            detail=f'Racer with name {racer.name} already taken'
+        )
+    
+    if not existing_rank:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Rank with id {racer.rank_id} does not exist'
         )
 
     new_racer = Racer(
