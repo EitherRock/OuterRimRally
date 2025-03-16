@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine
-from .routers import racers, ranks, parts, categories, login
+from .auth.views import router as auth_router
+from .racer.views import router as racer_router
+from .rank.views import router as rank_router
+from .category.views import router as category_router
+from .part.views import router as part_router
 
-# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -15,8 +17,8 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(racers.router)
-app.include_router(ranks.router)
-app.include_router(parts.router)
-app.include_router(categories.router)
-app.include_router(login.router)
+app.include_router(racer_router)
+app.include_router(rank_router)
+app.include_router(part_router)
+app.include_router(category_router)
+app.include_router(auth_router)

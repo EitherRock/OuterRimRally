@@ -10,7 +10,7 @@ import React from "react";
 
 function Header() {
     return (
-        <header>
+        <header className="outer-rim-header">
             <h1>Outer Rim Rally</h1>
         </header>
     );
