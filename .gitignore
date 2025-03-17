@@ -13,7 +13,5 @@ venv/
 .env.development
 .env.production
 
-alembic.ini
-
 .vscode/
 .idea/
