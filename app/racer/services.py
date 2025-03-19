@@ -5,15 +5,12 @@ from .schemas import RacerCreate, RacerUpdate
 from .models import Racer
 
 from ..rank.services import get as get_rank_by_id
+from ..database.services import get_by_name
 from ..util import hash_password
 
 
-def get_by_name(db: Session, racer_name: str):
-    db_racer = db.query(Racer).filter(Racer.name == racer_name).first()
-    return db_racer
-
 def create(db: Session, racer: RacerCreate):
-    existing_racer = get_by_name(db=db, racer_name=racer.name)
+    existing_racer = get_by_name(db=db, model=Racer, name=racer.name)
     existing_rank = get_rank_by_id(db=db, rank_id=racer.rank_id)
 
     if existing_racer:
@@ -68,6 +65,13 @@ def update(db: Session, racer_id: int, racer: RacerUpdate):
     update_data = {}
 
     if racer.name is not None:
+        existing_name = db.query(Racer).filter(Racer.id != racer_id).filter(Racer.name == racer.name).first()
+        if existing_name:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f'Racer name {racer.name} already taken'
+            )
+        
         update_data['name'] = racer.name
     
     if racer.credits is not None:

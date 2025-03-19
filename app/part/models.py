@@ -16,5 +16,6 @@ class Part(Base):
     description = Column(String, nullable=True)
     price = Column(Integer, nullable=False, server_default=text('0'))
     stock_quantity = Column(Integer, nullable=False, server_default=text('0'))
+    rating = Column(Integer, nullable=False, server_default=text('0'))
 
     category = relationship("Category", backref="parts")

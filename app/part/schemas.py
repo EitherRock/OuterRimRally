@@ -10,6 +10,7 @@ class PartBase(BaseModel):
     description: Optional[str] = Field(None)
     price: int = Field(default=0)
     stock_quantity: int = Field(default=0)
+    rating: int = Field(default=0)
 
 
 class PartCreate(PartBase):

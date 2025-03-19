@@ -16,6 +16,6 @@ class Racer(Base):
     races_attended = Column(Integer, default=0, nullable=False)
     credits = Column(Integer, default=1000, nullable=False)
 
-
+    cruiser = relationship("Cruiser", back_populates="racer", uselist=False, cascade="all, delete")
     rank = relationship("Rank", lazy="joined")  # Optimizes the join when querying
     orders = relationship("Order", cascade="all, delete", back_populates="racer")

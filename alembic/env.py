@@ -9,6 +9,7 @@ from app.racer.models import Racer
 from app.rank.models import Rank
 from app.part.models import Part
 from app.category.models import Category
+from app.cruiser.models import Cruiser
 from app.database.core import Base
 
 from dotenv import load_dotenv

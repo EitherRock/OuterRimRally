@@ -26,7 +26,15 @@ def get_all(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Part).offset(skip).limit(limit).all()
 
 def get(db: Session, part_id: int):
-    return db.query(Part).filter(Part.id == part_id).first()
+    db_part = db.query(Part).filter(Part.id == part_id).first()
+    
+    if not db_part:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Part id {part_id} not found"
+        )
+    
+    return db_part
 
 def update(db: Session, part_id: int, part: PartUpdate):
     db_part = db.query(Part).filter(Part.id == part_id).first()
